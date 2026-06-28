@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네트워크 오류 | AI Chat</title>
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/tokens.css?v=20260628">
+    <link rel="stylesheet" href="../css/components.css?v=20260628">
+    <link rel="stylesheet" href="../css/chatbot.css?v=20260628">
+  </head>
+  <body class="twc-chatbot publish-shell state-page">
+    <!-- 화면: 네트워크 오류. 기능 ID: USER-SCR-13, USER-FE-10-001 -->
+    <header class="twc-state-header flow-header state-header-title-center">
+      <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-state-action="back">
+        <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+      </button>
+      <h1 class="twc-h3">네트워크 오류</h1>
+    </header>
+    <main class="state-main">
+      <section class="twc-content state-hero">
+        <div class="twc-status-icon" aria-hidden="true"><img class="twc-icon twc-icon-xl" src="../image/icon/icon-status-info.svg" alt=""></div>
+        <h2 class="twc-h2">정보를 불러오지 못했습니다</h2>
+        <p>일시적으로 연결이 원활하지 않습니다.<br>네트워크 상태를 확인한 뒤 다시 시도해주세요.</p>
+      </section>
+      <section class="twc-content twc-detail-list network-detail-card" aria-label="오류 상세">
+        <div class="twc-detail-row"><span>요청 화면</span><strong>서비스센터 찾기</strong></div>
+        <div class="twc-detail-row"><span>오류 상태</span><strong>연결 지연</strong></div>
+        <div class="twc-detail-row"><span>권장 조치</span><strong>잠시 후 재시도</strong></div>
+      </section>
+      <footer class="twc-content state-actions">
+        <button class="twc-btn twc-btn-primary twc-focus-ring" type="button" data-state-action="retry">다시 시도하기</button>
+        <button class="twc-btn twc-btn-secondary twc-focus-ring" type="button" data-state-action="chatbot">AI Chat으로 돌아가기</button>
+      </footer>
+    </main>
+    <script src="../js/state.js"></script>
+  </body>
+</html>

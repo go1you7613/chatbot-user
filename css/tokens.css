@@ -1,0 +1,232 @@
+/*
+  ThinkWare AI Chat design tokens
+  Source: Figma ThinkWare_chatbot nodes 1:34, 1:128, 1:99
+*/
+
+:root {
+  /* Font families */
+  --twc-font-brand: 'Paperlogy', 'Noto Sans KR', sans-serif;
+  --twc-font-body: 'A2Z', 'Noto Sans KR', sans-serif;
+  --twc-font-system: 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif;
+
+  /* Colors */
+  --twc-color-bg: #f8f8f8;
+  --twc-color-bg-alt: #fafafa;
+  --twc-color-surface: #ffffff;
+  --twc-color-surface-muted: #f6f7f8;
+  --twc-color-surface-raised: #fbfdff;
+  --twc-color-surface-disabled: #f2f2f2;
+  --twc-color-surface-inverse: #3a3a3a;
+  --twc-color-bubble-user: #4c4c4c;
+  --twc-color-text-primary: #000000;
+  --twc-color-text-heading: #111111;
+  --twc-color-text-strong: #222222;
+  --twc-color-text-body: #383838;
+  --twc-color-text-subtle: #555555;
+  --twc-color-text-secondary: #666666;
+  --twc-color-text-muted: #7e7e7e;
+  --twc-color-text-placeholder: #b9b9b9;
+  --twc-color-border: #f0f0f0;
+  --twc-color-border-strong: #e0e0e0;
+  --twc-color-divider: #e8e8e8;
+  --twc-color-sheet-grip: #ececec;
+  --twc-color-accent: #ec321f;
+  --twc-color-accent-hover: #d92a18;
+  --twc-color-accent-soft: #fff1ef;
+  --twc-color-accent-subtle: #fff8f7;
+  --twc-color-success: #2e7d32;
+  --twc-color-success-soft: #e8f5e9;
+  --twc-color-warning: #ffb300;
+  --twc-color-danger: #c73346;
+  --twc-color-danger-soft: #fff0f2;
+  --twc-color-info: #3a3a3a;
+  --twc-color-map-placeholder-bg: #e8f1f8;
+  --twc-color-map-pin: #ec321f;
+  --twc-color-map-pin-muted: #666666;
+  --twc-color-overlay: rgba(0, 0, 0, 0.6);
+
+  /* Layout sizes */
+  --twc-size-app-width: 400px;
+  --twc-size-app-min-width-compact: 344px;
+  --twc-size-shell-width: 100%;
+  --twc-size-content-width: 360px;
+  --twc-size-content-max-width: 360px;
+  --twc-size-logo-width: 52px;
+  --twc-size-logo-height: 14px;
+  --twc-size-header-height: 40px;
+  --twc-size-flow-header-height: 56px;
+  --twc-size-state-header-height: 56px;
+  --twc-size-touch: 44px;
+  --twc-size-action-height: 54px;
+  --twc-size-icon-xs: 10px;
+  --twc-size-icon-sm: 14px;
+  --twc-size-icon-md: 20px;
+  --twc-size-icon-lg: 24px;
+  --twc-size-icon-xl: 32px;
+  --twc-size-chip-height: 28px;
+  --twc-size-empty-icon: 72px;
+  --twc-size-status-icon: 82px;
+  --twc-size-textarea-min-height: 96px;
+  --twc-size-input-category: 32px;
+  --twc-size-input-send: 24px;
+  --twc-size-inputbar-height: 70px;
+  --twc-size-sheet-input-clearance: 56px;
+  --twc-size-main-bottom-padding: 112px;
+  --twc-size-avatar: 32px;
+  --twc-size-service-button: 87px;
+  --twc-size-service-button-compact: 73px;
+  --twc-size-service-button-icon-compact: 20px;
+  --twc-size-sheet-panel-height: 454px;
+  --twc-size-category-tile-height: 68px;
+  --twc-size-answer-max-width: 348px;
+  --twc-size-product-card-width: 260px;
+  --twc-size-product-media-height: 172px;
+  --twc-size-compare-card-width: 290px;
+  --twc-size-map-height: 210px;
+  --twc-size-map-pin: 18px;
+  --twc-size-calendar-cell: 38px;
+  --twc-size-progress-step: 12px;
+
+  /* Spacing */
+  --twc-space-3: 3px;
+  --twc-space-4: 4px;
+  --twc-space-5: 5px;
+  --twc-space-6: 6px;
+  --twc-space-7: 7px;
+  --twc-space-8: 8px;
+  --twc-space-10: 10px;
+  --twc-space-12: 12px;
+  --twc-space-13: 13px;
+  --twc-space-14: 14px;
+  --twc-space-15: 15px;
+  --twc-space-16: 16px;
+  --twc-space-18: 18px;
+  --twc-space-19: 19px;
+  --twc-space-20: 20px;
+  --twc-space-22: 22px;
+  --twc-space-24: 24px;
+  --twc-space-28: 28px;
+  --twc-space-30: 30px;
+  --twc-space-32: 32px;
+  --twc-space-36: 36px;
+  --twc-space-40: 40px;
+  --twc-space-44: 44px;
+  --twc-space-48: 48px;
+  --twc-space-50: 50px;
+  --twc-space-60: 60px;
+  --twc-space-72: 72px;
+
+  /* Radius */
+  --twc-radius-xs: 5px;
+  --twc-radius-sm: 6.472px;
+  --twc-radius-control: 8px;
+  --twc-radius-md: 10.354px;
+  --twc-radius-card: 12px;
+  --twc-radius-panel: 14px;
+  --twc-radius-xl: 16px;
+  --twc-radius-2xl: 18px;
+  --twc-radius-lg: 20px;
+  --twc-radius-pill: 100px;
+
+  /* Border */
+  --twc-border-width: 1px;
+  --twc-border-width-accent: 1.191px;
+  --twc-border-hairline: var(--twc-border-width) solid var(--twc-color-border);
+  --twc-border-accent: var(--twc-border-width-accent) solid var(--twc-color-accent);
+
+  /* Shadow */
+  --twc-shadow-header: 0 1px 2.5px rgba(0, 0, 0, 0.1);
+  --twc-shadow-accent: 0 6px 5px rgba(207, 93, 93, 0.15);
+  --twc-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --twc-shadow-panel: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --twc-shadow-float: 0 10px 24px rgba(0, 0, 0, 0.1);
+  --twc-shadow-sheet: 0 -12px 32px rgba(0, 0, 0, 0.18);
+
+  /* Typography */
+  --twc-type-h1-size: 24px;
+  --twc-type-h1-line: 32px;
+  --twc-type-h1-weight: 700;
+
+  --twc-type-h2-size: 21px;
+  --twc-type-h2-line: 28px;
+  --twc-type-h2-weight: 800;
+
+  --twc-type-h3-size: 17px;
+  --twc-type-h3-line: 24px;
+  --twc-type-h3-weight: 700;
+
+  --twc-type-h4-size: 15px;
+  --twc-type-h4-line: 22px;
+  --twc-type-h4-weight: 700;
+  --twc-type-card-title-size: 16px;
+
+  --twc-type-header-size: 14px;
+  --twc-type-header-line: 14px;
+  --twc-type-header-weight: 700;
+
+  --twc-type-hero-size: 24px;
+  --twc-type-hero-line: normal;
+  --twc-type-hero-weight-bold: 700;
+  --twc-type-hero-weight-regular: 400;
+
+  --twc-type-subtitle-size: 13px;
+  --twc-type-subtitle-line: normal;
+  --twc-type-subtitle-weight: 400;
+
+  --twc-type-body-size: 14px;
+  --twc-type-body-line: 20px;
+  --twc-type-body-weight: 400;
+  --twc-type-body-weight-medium: 500;
+  --twc-type-body-weight-bold: 700;
+
+  --twc-type-body-relaxed-size: 14px;
+  --twc-type-body-relaxed-line: 28px;
+
+  --twc-type-body-lg-size: 16px;
+  --twc-type-body-lg-line: 24px;
+
+  --twc-type-price-size: 19px;
+  --twc-type-price-line: 24px;
+  --twc-type-price-weight: 800;
+
+  --twc-type-score-size: 15px;
+  --twc-type-score-line: 20px;
+  --twc-type-score-weight: 700;
+
+  --twc-type-small-size: 13px;
+  --twc-type-small-line: 18px;
+  --twc-type-small-weight: 400;
+
+  --twc-type-label-size: 14px;
+  --twc-type-label-line: normal;
+  --twc-type-label-weight: 700;
+
+  --twc-type-caption-size: 12px;
+  --twc-type-caption-line: 16px;
+  --twc-type-caption-weight: 400;
+
+  --twc-type-micro-size: 11px;
+  --twc-type-micro-line: 14px;
+  --twc-type-micro-weight: 400;
+
+  --twc-type-support-title-size: 17.257px;
+  --twc-type-support-title-line: normal;
+  --twc-type-support-title-weight: 700;
+
+  --twc-type-support-item-size: 11px;
+  --twc-type-support-item-line: normal;
+  --twc-type-support-item-weight: 400;
+  --twc-type-support-item-compact-size: 10px;
+  --twc-type-support-item-compact-line: 13px;
+
+  /* Motion */
+  --twc-motion-fast: 150ms;
+  --twc-motion-base: 220ms;
+  --twc-ease-standard: ease;
+
+  /* Layering */
+  --twc-z-header: 20;
+  --twc-z-sheet: 24;
+  --twc-z-inputbar: 25;
+  --twc-z-flow: 45;
+}

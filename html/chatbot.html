@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팅크웨어 AI Chat</title>
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/tokens.css?v=20260628">
+    <link rel="stylesheet" href="../css/components.css?v=20260628">
+    <link rel="stylesheet" href="../css/chatbot.css?v=20260628">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  </head>
+  <body class="twc-chatbot publish-shell" data-js="chatbot">
+    <!-- 화면: AI Chat 홈/대화. 기능 ID: USER-SCR-01, USER-SCR-02, USER-SCR-12 -->
+    <!-- 공통 헤더: AI Chat 로고와 종료 진입점 -->
+    <header class="twc-header publish-header">
+      <span aria-hidden="true"></span>
+      <span class="twc-logo-text" aria-label="AI Chat">AI Chat</span>
+      <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="상담 종료" data-action="open-flow" data-flow-target="survey-flow">
+        <img class="twc-icon twc-icon-md" src="../image/icon/icon-close.svg" alt="">
+      </button>
+    </header>
+
+    <!-- 홈, 추천 질문, 대화 예시 -->
+    <main class="twc-main publish-main" data-js="scrollArea">
+      <section class="twc-content home-intro" aria-labelledby="homeTitle">
+        <h1 class="twc-h1" id="homeTitle"><span class="home-title-brand">팅크웨어</span> <strong>AI Chat</strong>과<br>대화를 시작해볼까요?</h1>
+        <p>제품 추천부터 <span class="home-subtitle-strong">AS예약</span>까지<br>무엇이든 <strong>물어보세요</strong></p>
+      </section>
+
+      <!-- 보유제품 영역 CASE 01: 로그인 전. 실제 인증 연동 전까지 auth-flow 진입만 제공 -->
+      <section class="twc-content login-banner owned-product-state" aria-label="로그인 안내" data-owned-product-state="guest" aria-hidden="false">
+        <p>로그인을 하시면<br>나의 보유 제품을 확인할 수 있어요</p>
+        <button class="twc-btn twc-btn-secondary twc-focus-ring" type="button" data-action="open-flow" data-flow-target="auth-flow">로그인</button>
+      </section>
+
+      <!-- 보유제품 영역 CASE 02: 로그인 후 / 보유제품 없음. 로그인 성공 시 JS가 이 섹션을 노출 -->
+      <section class="twc-content owned-product-panel twc-owned-product-empty owned-product-state" aria-label="보유제품 없음" data-owned-product-state="empty" hidden aria-hidden="true">
+        <div>
+          <span class="twc-label">보유제품 0개</span>
+          <p>등록된 보유제품이 없습니다.</p>
+        </div>
+        <button class="twc-btn twc-btn-primary twc-focus-ring has-icon" type="button" data-action="register-product"><span>보유제품 등록</span><img class="twc-icon twc-icon-sm" src="../image/icon/icon-plus@2x.png" alt=""></button>
+      </section>
+
+      <!-- 보유제품 영역 CASE 03: 로그인 후 / 보유제품 있음. 보유제품 추가 CTA 포함 -->
+      <section class="twc-content owned-product-panel twc-owned-product-card owned-product-state" aria-label="보유제품 정보" data-owned-product-state="registered" hidden aria-hidden="true">
+        <div class="owned-product-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 QXD5000"></div>
+        <div class="owned-product-info">
+          <span class="twc-label">보유제품 1개</span>
+          <h2 class="twc-h4">아이나비 QXD5000</h2>
+          <p>블랙박스 · 등록 완료 · 맞춤 상담 가능</p>
+        </div>
+        <!-- [개발 연동] 보유제품 추가: 제품 등록 API 또는 제품 등록 플로우 진입점 -->
+        <button class="twc-btn twc-btn-secondary twc-focus-ring has-icon" type="button" data-action="button-feedback"><span>보유제품 추가</span><img class="twc-icon twc-icon-sm" src="../image/icon/icon-plus@2x.png" alt=""></button>
+      </section>
+
+      <!-- 추천 질문: 배열 데이터로 치환 가능한 반복 마크업 -->
+      <section class="twc-content suggestions" aria-labelledby="suggestionTitle">
+        <h2 class="sr-only" id="suggestionTitle">추천 질문</h2>
+        <ul class="suggestion-list">
+          <li>
+            <button class="suggestion-button twc-focus-ring" type="button" data-action="send-suggestion" data-message="QXD5000 블랙박스 특징 알려주세요">
+              <img class="twc-icon twc-icon-sm" src="../image/icon/icon-activity.svg" alt="">
+              <span>QXD5000 블랙박스 특징 알려주세요</span>
+            </button>
+          </li>
+          <li>
+            <button class="suggestion-button twc-focus-ring" type="button" data-action="send-suggestion" data-message="블랙박스 방문 AS 예약하기">
+              <img class="twc-icon twc-icon-sm" src="../image/icon/icon-activity.svg" alt="">
+              <span>블랙박스 방문 AS 예약하기</span>
+            </button>
+          </li>
+          <li>
+            <button class="suggestion-button twc-focus-ring" type="button" data-action="send-suggestion" data-message="가까운 장착점 찾아주세요">
+              <img class="twc-icon twc-icon-sm" src="../image/icon/icon-activity.svg" alt="">
+              <span>가까운 장착점 찾아주세요</span>
+            </button>
+          </li>
+          <li>
+            <button class="suggestion-button twc-focus-ring" type="button" data-action="send-suggestion" data-message="네비게이션 지도 업데이트 방법">
+              <img class="twc-icon twc-icon-sm" src="../image/icon/icon-activity.svg" alt="">
+              <span>네비게이션 지도 업데이트 방법</span>
+            </button>
+          </li>
+          <li>
+            <button class="suggestion-button twc-focus-ring" type="button" data-action="send-suggestion" data-message="블랙박스 주차 녹화 설정 방법">
+              <img class="twc-icon twc-icon-sm" src="../image/icon/icon-activity.svg" alt="">
+              <span>블랙박스 주차 녹화 설정 방법</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 고객지원 바로가기: 원형 버튼은 가로폭 증가 시 고정 크기 유지 -->
+      <section class="twc-content support-section" aria-labelledby="supportTitle">
+        <h2 class="twc-h3 section-title" id="supportTitle">고객지원</h2>
+        <div class="support-row">
+          <button class="twc-support-button twc-focus-ring" type="button" data-action="open-flow" data-flow-target="as-flow">
+            <img class="twc-icon twc-icon-lg" src="../image/icon/icon-calendar.svg" alt="">
+            <span>방문 AS 예약</span>
+          </button>
+          <button class="twc-support-button twc-focus-ring" type="button" data-action="open-flow" data-flow-target="locator-flow" data-locator-tab="service">
+            <img class="twc-icon twc-icon-lg" src="../image/icon/icon-phone-call.svg" alt="">
+            <span>서비스 센터</span>
+          </button>
+          <button class="twc-support-button twc-focus-ring" type="button" data-action="open-flow" data-flow-target="locator-flow" data-locator-tab="shop">
+            <img class="twc-icon twc-icon-lg" src="../image/icon/icon-home.svg" alt="">
+            <span>대리점</span>
+          </button>
+          <button class="twc-support-button twc-focus-ring" type="button" data-action="open-flow" data-flow-target="reservation-check-flow">
+            <img class="twc-icon twc-icon-lg" src="../image/icon/icon-check-square.svg" alt="">
+            <span>예약관리</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 채팅 메시지: 실제 API 연동 시 data-js="messageList" 내부를 메시지 컴포넌트로 반복 렌더링 -->
+      <section class="twc-content chat-thread" aria-label="대화 메시지" data-js="messageList">
+        <div class="twc-message-row is-user">
+          <div class="twc-message-bubble is-user">블랙박스 추천해주세요</div>
+          <time class="message-time" datetime="2026-06-28T19:12">오후 7:12</time>
+        </div>
+        <div class="twc-message-row is-ai">
+          <article class="twc-message-bubble is-ai">
+            <p class="twc-body-relaxed">블랙박스를 추천해드릴게요! 용도와 예산에 맞는 제품을 알려드리겠습니다.</p>
+            <h3 class="twc-h4">인기 모델 TOP 3</h3>
+            <ul class="answer-list">
+              <li><strong>QXD5000</strong> - QHD 전후방 + 야간 강화 AI ISP</li>
+              <li><strong>FXD900</strong> - 커넥티드 스마트 블랙박스 + 실시간 내비 연동</li>
+              <li><strong>QXD900mini</strong> - FHD 2채널·소형·다국어지원</li>
+            </ul>
+            <div class="answer-actions">
+              <button class="twc-btn twc-btn-secondary twc-focus-ring" type="button" data-action="open-flow" data-flow-target="product-search-flow">추천 제품 보기</button>
+              <button class="twc-btn twc-btn-secondary twc-focus-ring" type="button" data-action="open-flow" data-flow-target="product-spec-flow">스펙 비교</button>
+            </div>
+          </article>
+          <time class="message-time" datetime="2026-06-28T19:12">오후 7:12</time>
+        </div>
+      </section>
+
+      <!-- 원본 프로토타입 스크롤 하단: 긴 답변/참조 이미지/로딩 상태 -->
+      <!-- [개발 연동] 답변 영역 버튼 안내
+           · 복사: 클립보드 API (navigator.clipboard.writeText) 연동 필요
+           · 이 섹션의 button-feedback 버튼들은 실제 AI 답변 렌더링 시 동적 생성으로 교체됨 -->
+      <section class="twc-content scroll-coverage" aria-labelledby="answerExamplesTitle">
+        <h2 class="sr-only" id="answerExamplesTitle">답변 유형 예시</h2>
+        <article class="answer-message">
+          <div class="twc-answer-card">
+            <p class="twc-body-relaxed">아이나비 QXD5000은 전후방 QHD 화질과 야간 강화 AI ISP를 지원하는 프리미엄 블랙박스입니다. 야간 주행이 많거나 번호판 식별력을 중요하게 보는 사용자에게 잘 맞습니다.</p>
+            <div class="twc-answer-feedback" aria-label="답변 피드백">
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">복사</button>
+            </div>
+          </div>
+          <time class="message-time" datetime="2026-06-28T19:13">오후 7:13</time>
+        </article>
+
+        <article class="answer-message">
+          <div class="twc-answer-card">
+            <h3 class="twc-h3">모니터 전원 케이블 연결 불량 점검 방법</h3>
+            <p class="twc-body-relaxed">전원 코드와 어댑터가 콘센트와 제품에 끝까지 꽂혀 있는지 확인해 주세요. 케이블이 팽팽하게 당겨진 상태라면 움직일 때 접촉이 끊길 수 있으니 여유 있게 정리해 주세요.</p>
+            <ul class="answer-list">
+              <li><strong>전원 코드와 어댑터</strong> 체결 상태 확인</li>
+              <li><strong>DC-jack 단자</strong> 주변 흔들림 또는 이물질 확인</li>
+              <li><strong>케이블 장력</strong>이 심한 경우 여유 공간 확보</li>
+            </ul>
+            <figure class="twc-reference-media">
+              <img src="../image/product/reference-inavi-qxd1-plus.png" alt="아이나비 QXD1 PLUS 제품 이미지">
+              <figcaption>참조 이미지 · 아이나비 QXD1 PLUS</figcaption>
+            </figure>
+            <div class="twc-answer-feedback" aria-label="답변 피드백">
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">복사</button>
+            </div>
+          </div>
+          <time class="message-time" datetime="2026-06-28T19:14">오후 7:14</time>
+        </article>
+
+        <article class="answer-message">
+          <div class="twc-answer-card is-loading" aria-live="polite">
+            <div class="twc-typing" aria-label="답변 생성 중">
+              <span class="twc-typing-dot"></span>
+              <span class="twc-typing-dot"></span>
+              <span class="twc-typing-dot"></span>
+            </div>
+            <div class="twc-answer-feedback" aria-label="답변 피드백">
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">복사</button>
+            </div>
+          </div>
+          <time class="message-time" datetime="2026-06-28T19:15">오후 7:15</time>
+        </article>
+      </section>
+
+      <!-- 원본 프로토타입 스크롤 하단: 상품 추천/비교 -->
+      <!-- [개발 연동] 상품 카드 버튼 안내
+           · 새창열림: 상품 상세 페이지 URL (product_id 기반, URL 개발팀 확인)
+           · 장바구니 담기: POST /api/cart/add (product_id, quantity)
+           · 6년 구독 버튼: 구독 상품 안내 페이지 또는 링크 확인 필요
+           · 구매전문가 연결하기: 외부 링크 URL 개발팀 확인 -->
+      <section class="twc-content commerce-coverage" aria-labelledby="commerceCoverageTitle">
+        <h2 class="sr-only" id="commerceCoverageTitle">상품 추천과 비교</h2>
+        <article class="twc-recommend-card">
+          <div class="twc-recommend-media">
+            <img src="../image/product/product-qxd5000.jpg" alt="아이나비 QXD5000 블랙박스">
+            <span class="twc-badge">다품목 할인</span>
+          </div>
+          <h3 class="twc-h4">아이나비 QXD5000 프리미엄 QHD 블랙박스</h3>
+          <p class="product-meta">전후방 QHD · QXD5000</p>
+          <div class="twc-rating"><img class="twc-icon twc-icon-sm" src="../image/icon/icon-star@2x.png" alt=""><strong>4.9</strong><em>리뷰 1,434</em></div>
+          <div class="twc-price-block"><del>620,000원</del><span>최대혜택가</span><strong>513,600원</strong></div>
+          <button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">6년 구독 시, 월 17,800원</button>
+          <div class="answer-actions">
+            <button class="twc-btn twc-btn-secondary has-icon" type="button" data-action="button-feedback"><span>새창열림</span><img class="external-link-icon" src="../image/icon/icon-external-link.svg" alt=""></button>
+            <button class="twc-btn twc-btn-primary" type="button" data-action="button-feedback">장바구니 담기</button>
+          </div>
+        </article>
+
+        <div class="twc-compare-track" aria-label="상품 비교">
+          <article class="twc-compare-card">
+            <div class="twc-recommend-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 QXD5000"><span class="twc-badge">추천</span></div>
+            <h3 class="twc-h4">아이나비 QXD5000</h3>
+            <div class="twc-spec-table">
+              <div><span>라인업</span><strong>QXD 시리즈</strong></div>
+              <div><span>영상 프로세서</span><strong>야간 강화 AI ISP</strong></div>
+              <div><span>녹화 화질</span><strong>전후방 QHD</strong></div>
+              <div><span>커넥티드</span><strong>제공됨</strong></div>
+            </div>
+            <div class="answer-actions"><button class="twc-btn twc-btn-secondary has-icon" type="button" data-action="button-feedback"><span>새창열림</span><img class="external-link-icon" src="../image/icon/icon-external-link.svg" alt=""></button><button class="twc-btn twc-btn-primary" type="button" data-action="button-feedback">장바구니 담기</button></div>
+          </article>
+          <article class="twc-compare-card">
+            <!-- [프로토타입] FXD900 실제 이미지로 교체 필요 (현재 QXD5000 이미지 대체 사용) -->
+            <div class="twc-recommend-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 FXD900"><span class="twc-badge">스마트</span></div>
+            <h3 class="twc-h4">아이나비 FXD900</h3>
+            <div class="twc-spec-table">
+              <div><span>라인업</span><strong>FXD 시리즈</strong></div>
+              <div><span>영상 프로세서</span><strong>스마트 보정 ISP</strong></div>
+              <div><span>녹화 화질</span><strong>전후방 FHD</strong></div>
+              <div><span>커넥티드</span><strong>제공됨</strong></div>
+            </div>
+            <div class="answer-actions"><button class="twc-btn twc-btn-secondary has-icon" type="button" data-action="button-feedback"><span>새창열림</span><img class="external-link-icon" src="../image/icon/icon-external-link.svg" alt=""></button><button class="twc-btn twc-btn-primary" type="button" data-action="button-feedback">장바구니 담기</button></div>
+          </article>
+          <article class="twc-compare-card">
+            <!-- [프로토타입] QXD900mini 실제 이미지로 교체 필요 (현재 QXD5000 이미지 대체 사용) -->
+            <div class="twc-recommend-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 QXD900mini"><span class="twc-badge">소형</span></div>
+            <h3 class="twc-h4">아이나비 QXD900mini</h3>
+            <div class="twc-spec-table">
+              <div><span>라인업</span><strong>QXD mini</strong></div>
+              <div><span>영상 프로세서</span><strong>저조도 보정 ISP</strong></div>
+              <div><span>녹화 화질</span><strong>전후방 FHD</strong></div>
+              <div><span>커넥티드</span><strong>별도 지원</strong></div>
+            </div>
+            <div class="answer-actions"><button class="twc-btn twc-btn-secondary has-icon" type="button" data-action="button-feedback"><span>새창열림</span><img class="external-link-icon" src="../image/icon/icon-external-link.svg" alt=""></button><button class="twc-btn twc-btn-primary" type="button" data-action="button-feedback">장바구니 담기</button></div>
+          </article>
+        </div>
+
+        <div class="twc-chat-cta">
+          <p>이 제품이 고민되시나요? 더 많은 궁금증은 구매전문가가 안내해 드릴게요.</p>
+          <!-- [개발 연동] button-feedback 유형 A: 구매전문가 연결. 실제 상담 채널(전화/채팅/외부 예약 페이지) 연결 API 확인 필요 -->
+          <button class="twc-btn twc-btn-primary has-icon" type="button" data-action="button-feedback"><span>구매전문가 연결하기</span><img class="external-link-icon is-inverse" src="../image/icon/icon-external-link-white.svg" alt=""></button>
+        </div>
+      </section>
+
+      <!-- 원본 프로토타입 스크롤 하단: 검색 결과 없음과 상담 종료 -->
+      <section class="twc-content empty-search-coverage" aria-labelledby="emptySearchTitle">
+        <div class="twc-message-row is-user">
+          <div class="twc-message-bubble is-user">QXD7000 실시간 후방 카메라 찾아줘</div>
+          <time class="message-time" datetime="2026-06-28T17:11">오후 5:11</time>
+        </div>
+        <article class="twc-answer-card twc-empty-answer">
+          <h2 class="twc-h3" id="emptySearchTitle">검색 결과가 없습니다</h2>
+          <p class="twc-body-relaxed">요청하신 제품과 정확히 일치하는 아이나비 제품을 찾지 못했습니다. 모델명이나 기능명을 조금 바꿔 다시 검색해보세요.</p>
+          <div class="twc-state-card empty-search-card">
+            <div class="twc-status-icon" aria-hidden="true"><img class="twc-icon twc-icon-xl" src="../image/icon/icon-status-info.svg" alt=""></div>
+            <p class="twc-body">비슷한 제품과 추천 검색어를 확인해볼 수 있습니다.</p>
+            <div class="twc-empty-actions">
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="product-search-flow">QXD5000 추천 보기</button>
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="product-search-flow">블랙박스 전체 제품 보기</button>
+              <!-- [개발 연동] button-feedback 유형 B: 검색 미결 대안 CTA. 상담 채널 또는 챗봇 메시지 입력으로 연결 -->
+              <button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">상담으로 제품 찾기</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="twc-content twc-chat-end" aria-label="상담 종료">
+        <p>상담을 종료할까요?</p>
+        <button class="twc-btn twc-btn-primary" type="button" data-action="open-flow" data-flow-target="survey-flow">종료하기</button>
+      </section>
+    </main>
+
+    <!-- 공통 하단 입력바 -->
+    <footer class="publish-inputbar">
+      <div class="twc-chat-inputbar">
+        <button class="twc-category-button twc-focus-ring" type="button" aria-label="카테고리 열기" aria-controls="categorySheet" aria-expanded="false" data-js="categoryToggle" data-action="open-sheet">
+          <span class="twc-category-glyph" aria-hidden="true"></span>
+        </button>
+        <div class="twc-chat-input">
+          <input type="text" data-js="chatInput" placeholder="AI Chat에 무엇이든 물어보세요." aria-label="메시지 입력">
+          <button class="twc-send-button twc-focus-ring" type="button" aria-label="전송" data-action="send-message">
+            <img class="twc-send-icon" src="../image/icon/icon-send-plane.svg" alt="">
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 카테고리 바텀시트. 기능 ID: USER-SCR-02 -->
+    <section class="sheet" id="categorySheet" aria-hidden="true" data-js="categorySheet">
+      <button class="sheet-backdrop" type="button" aria-label="카테고리 닫기" data-action="close-sheet"></button>
+      <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="카테고리 메뉴">
+        <div class="sheet-grip" aria-hidden="true"></div>
+        <div class="sheet-body">
+          <div class="category-group">
+            <h3 class="twc-label">제품문의</h3>
+            <div class="category-grid">
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="product-search-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-file-search.svg" alt="">
+                <span>제품 검색/추천</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="product-spec-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-file-check.svg" alt="">
+                <span>제품 스펙/사용법</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="promo-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-heart.svg" alt="">
+                <span>인기/기획전</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="accessory-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-box.svg" alt="">
+                <span>액세서리/소모품</span>
+              </button>
+            </div>
+          </div>
+          <div class="category-group">
+            <h3 class="twc-label">AS/서비스</h3>
+            <div class="category-grid">
+              <button class="twc-tile is-selected twc-focus-ring" type="button" data-action="open-flow" data-flow-target="as-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-calendar-active.svg" alt="">
+                <span>방문 AS 예약</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="locator-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-map.svg" alt="">
+                <span>서비스센터/<br>장착점 찾기</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="reservation-check-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-check-square-service.svg" alt="">
+                <span>예약확인/변경/취소</span>
+              </button>
+              <button class="twc-tile twc-focus-ring" type="button" data-action="open-flow" data-flow-target="faq-flow">
+                <img class="twc-icon twc-icon-lg" src="../image/icon/icon-message-square.svg" alt="">
+                <span>자주 묻는 질문</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 로그인 플로우. 기능 ID: USER-FE-04-002 -->
+    <section class="flow" id="auth-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">로그인</h2>
+      </header>
+      <div class="flow-body">
+        <!-- [개발 연동] loginForm: action="/api/auth/login" method="post" 추가 필요. JS에서 submit 이벤트를 가로채 fetch로 처리. 성공 시 data-owned-product-state 전환 -->
+        <form class="twc-content form-stack" data-js="loginForm">
+          <label class="field-stack">
+            <span class="twc-form-label sr-only">아이디</span>
+            <input class="twc-input" type="text" name="username" autocomplete="username" placeholder="아이디">
+          </label>
+          <label class="field-stack">
+            <span class="twc-form-label sr-only">비밀번호</span>
+            <input class="twc-input" type="password" name="password" autocomplete="current-password" placeholder="비밀번호">
+          </label>
+          <nav class="auth-links" aria-label="계정 도움말">
+            <!-- [개발 연동] 아이디 찾기: 팅크웨어 계정관리 페이지 URL 확인 필요 -->
+            <a href="#" data-action="button-feedback">아이디 찾기</a>
+            <!-- [개발 연동] 비밀번호 찾기: 팅크웨어 계정관리 페이지 URL 확인 필요 -->
+            <a href="#" data-action="button-feedback">비밀번호 찾기</a>
+            <!-- [개발 연동] 회원 가입하기: 팅크웨어 회원가입 페이지 URL 확인 필요 -->
+            <a href="#" data-action="button-feedback">회원 가입하기</a>
+          </nav>
+          <button class="twc-btn twc-btn-primary twc-focus-ring" type="submit">로그인</button>
+        </form>
+        <!-- [개발 연동] 간편 로그인: 각 플랫폼 OAuth 2.0 인증 흐름 연동 필요 (Naver/Kakao/Facebook/Google/Apple) -->
+        <section class="twc-content auth-social" aria-labelledby="socialLoginTitle">
+          <h3 class="twc-h4" id="socialLoginTitle">간편 로그인</h3>
+          <button class="twc-social-btn" type="button" data-action="button-feedback"><span><img src="../image/icon/icon-social-naver.svg" alt=""></span>Naver 계정으로 로그인</button>
+          <button class="twc-social-btn" type="button" data-action="button-feedback"><span><img src="../image/icon/icon-social-kakao.svg" alt=""></span>Kakao 계정으로 로그인</button>
+          <button class="twc-social-btn" type="button" data-action="button-feedback"><span><img src="../image/icon/icon-social-facebook.svg" alt=""></span>Facebook 계정으로 로그인</button>
+          <button class="twc-social-btn" type="button" data-action="button-feedback"><span><img src="../image/icon/icon-social-google.svg" alt=""></span>Google 계정으로 로그인</button>
+          <button class="twc-social-btn" type="button" data-action="button-feedback"><span><img src="../image/icon/icon-social-apple.svg" alt=""></span>Apple 계정으로 로그인</button>
+        </section>
+      </div>
+    </section>
+
+    <!-- 방문 AS 예약 플로우. 기능 ID: USER-SCR-04 -->
+    <section class="flow" id="as-flow" aria-hidden="true" data-flow data-js="asFlow">
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="as-back">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <div class="flow-title">
+          <h2 class="twc-h3" data-js="asFlowTitle">방문 AS 예약</h2>
+          <p><span data-js="asStepCurrent">1</span>단계 / 5단계 <span data-js="asStepName">· 약관동의</span></p>
+        </div>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content step-indicator" aria-label="예약 단계">
+          <span class="twc-caption" data-js="asStepText"><strong class="as-step-current-number" data-js="asBodyStepCurrent">1</strong><span data-js="asBodyStepRest"> / 5 약관 동의</span></span>
+          <div class="step-line"><span data-js="asProgress" data-progress="1"></span></div>
+        </div>
+        <div class="twc-content as-guide">
+          <p data-js="asGuideText">방문 AS 예약을 시작하겠습니다.<br>먼저 <strong>개인정보 수집·이용</strong>에 동의해주세요.</p>
+        </div>
+        <section class="twc-content as-step is-active" data-as-step="1">
+          <div class="twc-form-card as-consent-card">
+            <h3 class="twc-h3">개인정보 수집·이용 동의</h3>
+            <p class="twc-body">AS 예약 서비스 제공을 위해 아래와 같이 개인정보를 수집·이용합니다.</p>
+            <div class="as-info-table" role="table" aria-label="개인정보 수집 및 이용 안내">
+              <div role="row">
+                <strong role="columnheader">수집 항목</strong>
+                <strong role="columnheader">이용 목적</strong>
+                <strong role="columnheader">보유 기간</strong>
+              </div>
+              <div role="row">
+                <span role="cell">성명, 연락처, 제품 모델명, 증상</span>
+                <span role="cell">AS 예약 접수 및 안내</span>
+                <span role="cell">예약 완료 후 1년</span>
+              </div>
+            </div>
+            <label class="as-check-row"><input type="checkbox" checked data-js="asAllAgree"> <span>전체 동의</span></label>
+            <label class="as-check-row"><input type="checkbox" checked data-js="asRequiredAgree"> <span><em>필수</em> 개인정보 수집·이용에 동의합니다</span></label>
+          </div>
+        </section>
+        <section class="twc-content as-step" data-as-step="2">
+          <!-- [개발 연동] 지도 API 삽입 영역: 선택 지역 또는 현재 위치 기준 센터 마커 표시 -->
+          <div class="locator-map as-center-map" id="asCenterMapApi" role="region" aria-label="방문 AS 서비스센터 지도 API 삽입 영역" data-map-api-slot>
+            <span class="locator-map-placeholder">지도 api 삽입</span>
+          </div>
+          <!-- [개발 연동] 지역 선택: 지역 목록 API 또는 선택 팝업 / 현재 위치: navigator.geolocation API -->
+          <div class="twc-select-row as-center-filter">
+            <div class="as-region-select" data-js="asRegionSelect">
+              <button class="twc-btn twc-btn-secondary" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="asRegionMenu" data-action="toggle-as-region">
+                <span data-js="asRegionLabel">서울 · 강남구</span>
+                <span class="as-select-caret" aria-hidden="true"></span>
+              </button>
+              <div class="as-region-menu" id="asRegionMenu" role="listbox" aria-label="서비스센터 지역 선택" data-js="asRegionMenu">
+                <button type="button" role="option" aria-selected="true" class="is-selected" data-action="select-as-region" data-region-label="서울 · 강남구">서울 · 강남구</button>
+                <button type="button" role="option" aria-selected="false" data-action="select-as-region" data-region-label="서울 · 서초구">서울 · 서초구</button>
+                <button type="button" role="option" aria-selected="false" data-action="select-as-region" data-region-label="서울 · 송파구">서울 · 송파구</button>
+                <button type="button" role="option" aria-selected="false" data-action="select-as-region" data-region-label="경기 · 성남시">경기 · 성남시</button>
+                <button type="button" role="option" aria-selected="false" data-action="select-as-region" data-region-label="경기 · 용인시">경기 · 용인시</button>
+              </div>
+            </div>
+            <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="현재 위치" data-action="button-feedback">
+              <img class="twc-icon twc-icon-md" src="../image/icon/icon-location@2x.png" alt="">
+            </button>
+          </div>
+          <p class="twc-caption">총 <strong>3개</strong> 센터</p>
+          <div class="as-center-list">
+            <button class="twc-place-card as-center-card is-selected twc-focus-ring" type="button" data-action="select-in-group">
+              <span class="as-radio" aria-hidden="true"></span>
+              <span class="as-center-title">아이나비 강남 서비스센터</span>
+              <span class="as-center-distance">0.8km</span>
+              <span class="as-center-info">
+                <span>서울 강남구 테헤란로 152</span>
+                <span>02-1234-5678</span>
+                <span>평일 09:00~18:00</span>
+              </span>
+              <span class="tag-list"><span>공식 서비스센터</span><span>예약 가능</span></span>
+            </button>
+            <button class="twc-place-card as-center-card twc-focus-ring" type="button" data-action="select-in-group">
+              <span class="as-radio" aria-hidden="true"></span>
+              <span class="as-center-title">아이나비 서초 대리점</span>
+              <span class="as-center-distance">1.4km</span>
+              <span class="as-center-info">
+                <span>서울 서초구 강남대로 305</span>
+                <span>02-2345-5678</span>
+                <span>평일 10:00~19:00</span>
+              </span>
+              <span class="tag-list"><span>대리점</span><span>장착 가능</span></span>
+            </button>
+          </div>
+        </section>
+        <section class="twc-content as-step" data-as-step="3">
+          <div class="twc-calendar" aria-label="예약 날짜 선택">
+            <!-- Flatpickr inline 마운트 포인트 -->
+            <div data-js="asCalendar"></div>
+            <h4 class="twc-h4" data-js="asSlotTitle">날짜를 선택해주세요</h4>
+            <div class="slot-grid time-grid" aria-label="예약 시간 선택" data-js="asSlotGrid"></div>
+            <p class="twc-helper">회색 시간대는 이미 예약이 완료된 시간입니다.</p>
+          </div>
+        </section>
+        <section class="twc-content as-step" data-as-step="4">
+          <div class="flow-section-title">
+            <h3 class="twc-h3">선택한 예약 정보</h3>
+          </div>
+          <div class="twc-detail-list as-summary-card">
+            <div class="twc-detail-row"><span>센터</span><strong>아이나비 강남 서비스센터</strong></div>
+            <div class="twc-detail-row"><span>날짜</span><strong data-js="asSummaryDate">—</strong></div>
+            <div class="twc-detail-row"><span>시간</span><strong data-js="asSummaryTime">—</strong></div>
+          </div>
+          <div class="flow-section-title">
+            <h3 class="twc-h3">예약자 정보</h3>
+          </div>
+          <div class="twc-form-card as-form-card">
+            <div class="form-stack">
+              <label class="field-stack"><span class="twc-form-label">성명 <em>*</em></span><input class="twc-input" type="text" name="reserverName" value="김하나"></label>
+              <label class="field-stack"><span class="twc-form-label">연락처 <em>*</em></span><input class="twc-input" type="tel" name="phone" value="010-0000-1234"></label>
+              <label class="field-stack"><span class="twc-form-label">제품 모델명 <em>*</em></span><input class="twc-input" type="text" name="modelName" value="QXD5000"></label>
+              <label class="field-stack"><span class="twc-form-label">증상설명 <em>*</em></span><textarea class="twc-textarea" name="symptom">주행 중 전원이 간헐적으로 꺼지고 녹화 파일이 저장되지 않습니다.</textarea></label>
+            </div>
+          </div>
+        </section>
+        <section class="twc-content as-step as-complete-step" data-as-step="5">
+          <div class="state-hero">
+            <div class="twc-status-icon as-complete-status-icon" aria-hidden="true"><img class="twc-icon twc-icon-xl" src="../image/icon/icon-status-check.svg" alt=""></div>
+            <h3 class="twc-h2">예약이 완료되었습니다!</h3>
+            <p>방문 예약이 정상적으로 접수되었습니다.<br>예약 당일 10분 전에 방문해주세요.</p>
+          </div>
+          <div class="as-reservation-number">
+            <span>예약 번호</span>
+            <strong>INV-2026-06291</strong>
+          </div>
+          <div class="twc-detail-list as-summary-card">
+            <div class="twc-detail-row"><span>상태</span><strong>예약 확정</strong></div>
+            <div class="twc-detail-row"><span>센터</span><strong>아이나비 강남 서비스센터</strong></div>
+            <div class="twc-detail-row"><span>날짜</span><strong>2026년 6월 29일 (월) 09:30</strong></div>
+            <div class="twc-detail-row"><span>예약자</span><strong>김하나 · 010-0000-1234</strong></div>
+            <div class="twc-detail-row"><span>제품</span><strong>아이나비 QXD5000</strong></div>
+            <div class="twc-detail-row"><span>증상</span><strong>주차 중 녹화가 안 됩니다.</strong></div>
+          </div>
+          <article class="twc-form-card as-notice-card">
+            <h4 class="twc-h4">방문 전 확인 사항</h4>
+            <ul class="answer-list">
+              <li>예약 당일 예약 번호를 제시해주세요.</li>
+              <li>제품 보증서 및 구매 영수증을 지참해주세요.</li>
+              <li>취소/변경은 방문 1일 전까지 가능합니다.</li>
+              <li>당일 취소 시 불이익이 생길 수 있습니다.</li>
+            </ul>
+          </article>
+        </section>
+      </div>
+      <div class="as-toast" role="status" aria-live="polite" aria-atomic="true" data-js="asToast" hidden></div>
+      <footer class="flow-footer">
+        <button class="twc-btn twc-btn-secondary twc-focus-ring" type="button" data-action="as-prev">이전</button>
+        <button class="twc-btn twc-btn-primary twc-focus-ring" type="button" data-action="as-next">다음</button>
+      </footer>
+    </section>
+
+    <!-- 센터/장착점 찾기. 기능 ID: USER-SCR-05 -->
+    <section class="flow" id="locator-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">장착점 · 서비스센터 찾기</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content flow-grid">
+          <!-- [개발 연동] 장소 카드 버튼 안내
+               · 전화: tel:{전화번호} 링크 또는 클릭투콜 API (서버 응답 데이터의 전화번호 사용)
+               · 길찾기: 카카오맵 또는 네이버맵 딥링크 (latitude, longitude 파라미터 활용)
+               · 현재 위치: navigator.geolocation API -->
+          <!-- 탭 컴포넌트: 센터 유형 전환. 개발 연동 시 data-tab-group/target 값을 기준으로 패널을 제어합니다. -->
+          <div class="twc-tablist locator-tabs" role="tablist" aria-label="센터 유형">
+            <button class="is-active" type="button" role="tab" aria-selected="true" aria-controls="locator-panel-shop" data-action="switch-tab" data-tab-group="locator" data-tab-target="shop">대리점·장착점</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="locator-panel-service" data-action="switch-tab" data-tab-group="locator" data-tab-target="service">서비스센터</button>
+          </div>
+          <!-- 개발 연동 지점: 지도 API를 이 컨테이너 내부에 mount 해주세요. 예: Kakao/Naver/Google Map root -->
+          <div class="locator-map" id="locatorMapApi" role="region" aria-label="지도 API 삽입 영역" data-map-api-slot>
+            <span class="locator-map-placeholder">지도 api 삽입</span>
+          </div>
+          <!-- 현재 검색 기준 지역 표시. 지역 변경 기능을 붙일 경우 이 영역을 선택형 컨트롤로 교체합니다. -->
+          <div class="twc-select-row locator-region-row">
+            <button class="twc-btn twc-btn-secondary locator-region-chip" type="button" aria-label="현재 검색 지역" data-current-region>
+              <span>서울 · 강남구</span>
+              <span class="as-select-caret" aria-hidden="true"></span>
+            </button>
+            <button class="twc-icon-btn twc-focus-ring locator-current-button" type="button" aria-label="현재 위치" data-action="button-feedback">
+              <img class="twc-icon twc-icon-md" src="../image/icon/icon-location@2x.png" alt="">
+            </button>
+          </div>
+          <div class="feature-panel locator-place-list is-active" id="locator-panel-shop" role="tabpanel" aria-label="대리점·장착점 목록" data-tab-panel="locator" data-tab-name="shop">
+            <!-- [개발 연동] button-feedback 유형 C: 목록 정렬. 거리·이름순 등 정렬 옵션 팝업/드롭다운으로 교체 -->
+          <!-- button-feedback 유형 D: 전화=tel:{phone} 링크, 길찾기=카카오맵/네이버맵 딥링크 (서버 lat/lng 파라미터 활용) -->
+          <div class="flow-list-head locator-list-head">
+              <p class="twc-body">총 <strong>5개</strong> 검색</p>
+              <button class="twc-btn twc-btn-secondary locator-sort-button" type="button" data-action="button-feedback">
+                <span>거리 가까운 순</span>
+                <span class="as-select-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 강남 직영점</h3><span class="twc-chip locator-distance">0.4km</span></div>
+              <p class="twc-body locator-address">서울 강남구 테헤란로 152</p>
+              <p class="twc-body locator-hours">평일 09:00~18:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">공식대리점</span><span>블랙박스 장착</span><span>네비 설치</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button><button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="as-flow">AS예약</button></div>
+            </article>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 서초 파트너점</h3><span class="twc-chip">1.2km</span></div>
+              <p class="twc-body locator-address">서울 서초구 강남대로 305</p>
+              <p class="twc-body locator-hours">평일 10:00~19:00, 토 10:00~15:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">블랙박스 장착</span><span>틴팅</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button></div>
+            </article>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 역삼 장착점</h3><span class="twc-chip">1.8km</span></div>
+              <p class="twc-body locator-address">서울 강남구 논현로 508</p>
+              <p class="twc-body locator-hours">평일 09:30~18:30</p>
+              <div class="tag-list locator-tags"><span class="is-primary">블랙박스 장착</span><span>네비 설치</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button><button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="as-flow">AS예약</button></div>
+            </article>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 삼성 파트너점</h3><span class="twc-chip">2.3km</span></div>
+              <p class="twc-body locator-address">서울 강남구 봉은사로 618</p>
+              <p class="twc-body locator-hours">평일 10:00~19:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">블랙박스 장착</span><span>커넥티드 설정</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button></div>
+            </article>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 논현 장착점</h3><span class="twc-chip">2.9km</span></div>
+              <p class="twc-body locator-address">서울 강남구 학동로 215</p>
+              <p class="twc-body locator-hours">평일 09:00~18:00, 토 10:00~14:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">공식대리점</span><span>블랙박스 장착</span><span>틴팅</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button><button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="as-flow">AS예약</button></div>
+            </article>
+          </div>
+          <div class="feature-panel locator-place-list" id="locator-panel-service" role="tabpanel" aria-label="서비스센터 목록" data-tab-panel="locator" data-tab-name="service">
+            <div class="flow-list-head locator-list-head">
+              <p class="twc-body">총 <strong>3개</strong> 검색</p>
+              <button class="twc-btn twc-btn-secondary locator-sort-button" type="button" data-action="button-feedback">
+                <span>거리 가까운 순</span>
+                <span class="as-select-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 서초 서비스센터</h3><span class="twc-chip">3.4km</span></div>
+              <p class="twc-body locator-address">서울 서초구 강남대로 305</p>
+              <p class="twc-body locator-hours">평일 09:00~18:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">공식 서비스센터</span><span>예약 가능</span><span>제품 점검</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button><button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="as-flow">AS예약</button></div>
+            </article>
+            <article class="twc-place-card locator-card">
+              <div class="place-card-head"><h3 class="twc-h4">아이나비 송파 서비스센터</h3><span class="twc-chip">2.1km</span></div>
+              <p class="twc-body locator-address">서울 송파구 올림픽로 240</p>
+              <p class="twc-body locator-hours">평일 10:00~19:00</p>
+              <div class="tag-list locator-tags"><span class="is-primary">서비스 접수</span><span>제품 점검</span></div>
+              <div class="place-actions locator-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">전화</button><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">길찾기</button></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 예약 확인/변경/취소. 기능 ID: USER-SCR-06 -->
+    <section class="flow" id="reservation-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">예약확인 · 변경 · 취소</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content flow-grid">
+          <div class="flow-section-title">
+            <h3 class="twc-h3">예약 조회</h3>
+          </div>
+          <div class="twc-form-card form-stack">
+            <label class="field-stack"><span class="twc-form-label">예약 번호</span><input class="twc-input" type="text" name="reservationNo" value="TW-AI-0001"></label>
+            <label class="field-stack"><span class="twc-form-label">연락처</span><input class="twc-input" type="tel" name="phone" value="연락처 확인용"></label>
+            <button class="twc-btn twc-btn-primary" type="button" data-action="button-feedback">예약 조회하기</button>
+          </div>
+          <!-- [개발 연동] 예약 조회하기: GET /api/reservation?no={reservationNo}&phone={phone} -->
+          <!-- [개발 연동] button-feedback 유형 E: 예약 상세/변경/유지/취소 — 예약 ID 기준 API 호출로 교체. GET /api/reservation/{id}, DELETE /api/reservation/{id} -->
+          <article class="twc-place-card">
+            <span class="twc-chip">예약 확정</span>
+            <h3 class="twc-h4">아이나비 강남 서비스센터 방문 AS</h3>
+            <p class="twc-body">2026년 6월 22일 (월) 09:30</p>
+            <p class="twc-helper">QXD5000 · 주차 녹화 점검</p>
+            <div class="answer-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">상세 보기</button><button class="twc-btn twc-btn-secondary" type="button" data-action="open-flow" data-flow-target="as-flow">변경하기</button></div>
+          </article>
+          <div class="twc-detail-list as-summary-card">
+            <div class="twc-detail-row"><span>예약 번호</span><strong>TW-AI-0001</strong></div>
+            <div class="twc-detail-row"><span>센터</span><strong>아이나비 강남 서비스센터</strong></div>
+            <div class="twc-detail-row"><span>예약자</span><strong>예약자 · 연락처 확인용</strong></div>
+            <div class="twc-detail-row"><span>증상</span><strong>주차 중 녹화 점검</strong></div>
+          </div>
+          <div class="twc-confirm-card">
+            <p>예약을 취소하시겠습니까? 취소 후 같은 시간대 재예약이 어려울 수 있습니다.</p>
+            <!-- [개발 연동] 예약 취소: DELETE /api/reservation/{id} (취소 정책 및 위약금 안내 개발팀 확인) -->
+            <div class="answer-actions"><button class="twc-btn twc-btn-secondary" type="button" data-action="button-feedback">유지하기</button><button class="twc-btn twc-btn-danger" type="button" data-action="button-feedback">예약 취소</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ. 기능 ID: USER-SCR-07 -->
+    <section class="flow" id="faq-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">자주 묻는 질문</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content feature-panel is-active" data-faq-panel="list">
+          <div class="faq-list">
+            <button class="faq-button" type="button" data-action="faq-detail"><span class="twc-chip">블랙박스</span><h3 class="twc-h4">녹화 영상은 어디에서 확인하나요?</h3><p class="twc-body">앱, PC 뷰어, 제품 메모리카드에서 확인할 수 있습니다.</p></button>
+            <button class="faq-button" type="button" data-action="faq-detail"><span class="twc-chip">내비게이션</span><h3 class="twc-h4">지도 업데이트는 어떻게 하나요?</h3><p class="twc-body">아이나비 매니저를 통해 업데이트합니다.</p></button>
+            <button class="faq-button" type="button" data-action="faq-detail"><span class="twc-chip">AS</span><h3 class="twc-h4">방문 AS 예약 변경은 언제까지 가능한가요?</h3><p class="twc-body">방문 1일 전까지 예약 확인 화면에서 변경할 수 있습니다.</p></button>
+          </div>
+        </div>
+        <div class="twc-content feature-panel" data-faq-panel="detail">
+          <article class="twc-answer-card">
+            <h3 class="twc-h3">녹화 영상 확인 방법</h3>
+            <p class="twc-body-relaxed">제품 메모리카드를 PC에 연결하거나 아이나비 앱을 통해 최근 녹화 영상을 확인할 수 있습니다. 중요한 영상은 별도로 백업해 주세요.</p>
+            <ul class="answer-list"><li>상시 녹화: 주행 중 자동 저장</li><li>이벤트 녹화: 충격 감지 시 별도 보관</li><li>주차 녹화: 전원 연결 상태에 따라 지원</li></ul>
+            <button class="twc-btn twc-btn-secondary" type="button" data-action="faq-list">목록으로</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 제품 검색/추천. 기능 ID: USER-SCR-08 -->
+    <section class="flow" id="product-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">제품 검색/추천</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content flow-grid">
+          <section class="twc-form-card">
+            <h3 class="twc-h4">검색 조건</h3>
+            <p class="feature-search-box">블랙박스 · 전후방 QHD · 주차 녹화</p>
+          </section>
+          <section class="product-strip" aria-label="추천 결과">
+            <article class="twc-product-card">
+              <div class="twc-product-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 QXD5000"><span class="twc-badge">추천</span></div>
+              <h3 class="twc-h4 product-title">아이나비 QXD5000</h3>
+              <p class="product-meta">QHD 전후방 · 야간 강화 AI ISP</p>
+              <p class="twc-price">513,600원</p>
+            </article>
+            <article class="twc-product-card">
+              <div class="twc-product-media"><img src="../image/product/product-qxd5000.jpg" alt="아이나비 FXD900"><span class="twc-badge">실속형</span></div>
+              <h3 class="twc-h4 product-title">아이나비 FXD900</h3>
+              <p class="product-meta">전후방 FHD · 스마트 보정</p>
+              <p class="twc-price">359,000원</p>
+            </article>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- 제품 스펙/사용법. 기능 ID: USER-SCR-09 -->
+    <section class="flow" id="spec-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">제품 스펙/사용법</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content flow-section-title">
+          <h3 class="twc-h3">제품 선택</h3>
+        </div>
+        <div class="twc-content flow-grid">
+          <div class="twc-segment" data-js="specProductTabs"><button class="is-active is-selected" type="button" data-action="select-spec-product" data-product="qxd5000" aria-pressed="true">QXD5000</button><button type="button" data-action="select-spec-product" data-product="fxd900" aria-pressed="false">FXD900</button><button type="button" data-action="select-spec-product" data-product="qxd900mini" aria-pressed="false">QXD900mini</button></div>
+          <div class="flow-section-title">
+            <h3 class="twc-h3">스펙 안내</h3>
+          </div>
+          <div class="twc-detail-list">
+            <div class="twc-detail-row"><span>화질</span><strong data-js="specResolution">전후방 QHD</strong></div>
+            <div class="twc-detail-row"><span>특징</span><strong data-js="specFeature">야간 강화 AI ISP</strong></div>
+            <div class="twc-detail-row"><span>권장 사용자</span><strong data-js="specUser">장거리 주행</strong></div>
+          </div>
+          <div class="flow-section-title">
+            <h3 class="twc-h3">사용법</h3>
+          </div>
+          <article class="twc-answer-card">
+            <h3 class="twc-h4" data-js="specGuideTitle">주차 녹화 설정</h3>
+            <p class="twc-body-relaxed" data-js="specGuideBody">제품 메뉴에서 주차 녹화 모드를 켠 뒤 배터리 보호 전압을 설정해주세요. 장시간 주차 시 차량 배터리 상태를 확인하는 것이 좋습니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 액세서리/소모품. 기능 ID: USER-SCR-10 -->
+    <section class="flow" id="accessory-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">액세서리/소모품</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content twc-card-grid">
+          <article class="twc-mini-card"><h3 class="twc-h4">정품 메모리카드 128GB</h3><p class="twc-body">QXD/FXD 시리즈 호환</p><strong>39,000원</strong></article>
+          <article class="twc-mini-card"><h3 class="twc-h4">상시 전원 케이블</h3><p class="twc-body">주차 녹화 지원용</p><strong>24,000원</strong></article>
+          <article class="twc-mini-card"><h3 class="twc-h4">후방 카메라 케이블</h3><p class="twc-body">2채널 설치 부품</p><strong>18,000원</strong></article>
+          <article class="twc-mini-card"><h3 class="twc-h4">거치 브라켓</h3><p class="twc-body">전면 유리 부착형</p><strong>12,000원</strong></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 인기/기획전. 기능 ID: USER-SCR-11 -->
+    <section class="flow" id="promo-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">인기·기획전</h2>
+      </header>
+      <div class="flow-body">
+        <div class="twc-content flow-grid">
+          <article class="twc-banner-card"><span class="twc-chip">블랙박스 교체 기획전</span><h3 class="twc-h4">QXD 시리즈 구매 시 장착비 지원</h3><p class="twc-body">프리미엄 모델과 정품 메모리카드를 함께 구성해보세요.</p></article>
+          <article class="twc-banner-card"><span class="twc-chip">커넥티드 패키지</span><h3 class="twc-h4">실시간 알림 서비스 추천</h3><p class="twc-body">주차 충격 알림과 원격 영상 확인이 필요한 운전자에게 적합합니다.</p></article>
+          <article class="twc-banner-card"><span class="twc-chip">내비 업데이트</span><h3 class="twc-h4">장거리 운전 전 지도 업데이트 안내</h3><p class="twc-body">최신 도로 정보를 적용하고 안전하게 출발하세요.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 상담 종료 설문. 기능 ID: USER-SCR-12 -->
+    <section class="flow" id="survey-flow" aria-hidden="true" data-flow>
+      <header class="flow-header">
+        <button class="twc-icon-btn twc-focus-ring" type="button" aria-label="뒤로가기" data-action="close-flow">
+          <img class="twc-icon twc-icon-md" src="../image/icon/icon-arrow-left.svg" alt="">
+        </button>
+        <h2 class="twc-h3">AI Chat 상담 경험 조사</h2>
+      </header>
+      <div class="flow-body">
+        <!-- [개발 연동] survey-form: action="/api/survey" method="post" 추가 필요. select-in-group 버튼 선택값은 JS가 hidden input(<input type="hidden" name="resolved" value="예">) 으로 수집 후 제출 -->
+        <form class="twc-content survey-form">
+          <fieldset class="field-stack">
+            <legend class="twc-form-label">문제가 해결되셨나요?</legend>
+            <div class="survey-choice-grid" role="group" aria-label="문제 해결 여부">
+              <button type="button" data-action="select-in-group">아니요</button>
+              <button class="is-selected" type="button" data-action="select-in-group">예</button>
+            </div>
+          </fieldset>
+          <fieldset class="field-stack">
+            <legend class="twc-form-label">상담 내용에 얼마나 만족하셨나요?</legend>
+            <div class="score-grid" role="group" aria-label="만족도 점수">
+              <button type="button" data-action="select-in-group">1</button><button type="button" data-action="select-in-group">2</button><button type="button" data-action="select-in-group">3</button><button type="button" data-action="select-in-group">4</button><button type="button" data-action="select-in-group">5</button><button type="button" data-action="select-in-group">6</button><button type="button" data-action="select-in-group">7</button><button type="button" data-action="select-in-group">8</button><button type="button" data-action="select-in-group">9</button><button class="is-selected" type="button" data-action="select-in-group">10</button>
+            </div>
+            <div class="score-helper" aria-hidden="true"><span>불만족</span><span>만족</span></div>
+          </fieldset>
+          <fieldset class="field-stack">
+            <legend class="twc-form-label">어떤 점이 만족스러우셨나요?</legend>
+            <div class="reason-grid">
+              <button type="button" data-action="select-in-group">정보가 유용함</button>
+              <button type="button" data-action="select-in-group">대화를 잘 이해함</button>
+              <button type="button" data-action="select-in-group">오류 없이 이용함</button>
+              <input class="twc-input" type="text" name="freeText" placeholder="직접 입력">
+            </div>
+          </fieldset>
+          <button class="twc-btn twc-btn-primary" type="button" data-action="close-flow">평가 제출하기</button>
+        </form>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="../js/chatbot.js?v=20260628"></script>
+  </body>
+</html>
