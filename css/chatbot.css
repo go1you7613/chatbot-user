@@ -2359,7 +2359,7 @@ fieldset {
 
 /* 연도 숫자 — 텍스트처럼 표시, 편집 불가 */
 .twc-calendar .numInput.cur-year {
-  font-size: var(--twc-font-size-body, 16px) !important;
+  font-size: var(--twc-font-size-body, 14px) !important;
   font-weight: var(--twc-font-weight-bold, 700) !important;
   color: var(--twc-color-text-heading) !important;
   background: transparent !important;
@@ -2399,7 +2399,7 @@ fieldset {
   border: 1px solid var(--twc-color-border, #e0e0e0) !important;
   border-radius: var(--twc-radius-sm, 6px) !important;
   padding: 4px 26px 4px 10px !important;
-  font-size: var(--twc-font-size-body, 16px) !important;
+  font-size: var(--twc-font-size-body, 14px) !important;
   font-weight: var(--twc-font-weight-bold, 700) !important;
   color: var(--twc-color-text-heading) !important;
   cursor: pointer !important;
@@ -2443,7 +2443,7 @@ fieldset {
   background: transparent !important;
   color: var(--twc-color-text-heading);
   font: inherit;
-  font-size: var(--twc-font-size-body, 16px);
+  font-size: var(--twc-font-size-body, 14px);
   font-weight: var(--twc-font-weight-bold, 700);
   line-height: 22px;
   cursor: pointer;
@@ -2535,7 +2535,7 @@ fieldset {
   border: 0;
   background: transparent;
   color: rgba(0, 0, 0, 0.85);
-  font-size: var(--twc-font-size-body, 16px);
+  font-size: 14px;
   font-weight: 400;
   line-height: 24px;
   text-align: left;
